@@ -15,8 +15,8 @@ const themeOptions = document.querySelectorAll("[data-theme-option]");
 // Consultamos si el usuario tiene el sistema activado darkmode
 const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
 
-let currentTheme =
-  localStorage.getItem("theme") || localStorage.setItem("theme", "system");
+let currentTheme = localStorage.getItem("theme") || "system";
+localStorage.setItem("theme", "system");
 
 updateTheme(currentTheme);
 updateThemeUI(currentTheme);
