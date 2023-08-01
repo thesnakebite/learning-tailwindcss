@@ -1,35 +1,70 @@
 const html = document.documentElement;
-const toggleThemeButton = document.getElementById("toggle-dark-mode");
 // Themes
-const sunIcon = document.getElementById("sun-icon");
-const moonIcon = document.getElementById("moon-icon");
+// const sunIcon = document.getElementById("sun-icon");
+// const moonIcon = document.getElementById("moon-icon");
+// const systemIcon = document.getElementById("system-icon");
 
+const icons = {
+  light: document.getElementById("sun-icon"),
+  dark: document.getElementById("moon-icon"),
+  system: document.getElementById("system-icon"),
+};
+
+const themeMenu = document.getElementById("theme-menu");
+const themeOptions = document.querySelectorAll("[data-theme-option]");
 // Consultamos si el usuario tiene el sistema activado darkmode
-const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
-const systemDarkMode = matchMedia.matches;
+const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
 
-toggleThemeButton.addEventListener("click", () => {
-  // Toggle dark class
-  html.classList.toggle("dark");
-  sunIcon.classList.toggle("hidden");
-  moonIcon.classList.toggle("hidden");
-});
+let currentTheme = "system";
 
-function updatedTheme(darkmode) {
-  if (darkmode) {
-    html.classList.add("dark");
-    sunIcon.classList.remove("hidden");
-    moonIcon.classList.add("hidden");
-  } else {
-    html.classList.remove("dark");
-    sunIcon.classList.add("hidden");
-    moonIcon.classList.remove("hidden");
-  }
+updateTheme(currentTheme);
+updateThemeUI(currentTheme);
+
+function updateThemeUI(theme) {
+  Object.entries(icons).forEach(([key, icon]) =>
+    key === theme
+      ? icon.classList.remove("hidden")
+      : icon.classList.add("hidden")
+  );
+
+  // Finalmente ocultamos el menu
+  themeMenu.classList.add("hidden");
 }
 
-updatedTheme(systemDarkMode);
+function updateTheme(theme) {
+  if (theme === "dark" || (theme === "system" && isDarkMode.matches)) {
+    html.classList.add("dark");
+  } else if (theme === "light" || (theme === "system" && !isDarkMode.matches)) {
+    html.classList.remove("dark");
+  }
 
-// Ahora si queremos escuchar cuando el usuario aplica el darkmode del sistema
-matchMedia.addEventListener("change", ({ matches }) => {
-  updatedTheme(matches);
+  currentTheme = theme;
+}
+
+isDarkMode.addEventListener("change", ({ matches }) => {
+  if (currentTheme === "system") {
+    matches ? html.classList.add("dark") : html.classList.remove("dark");
+  }
 });
+
+themeOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    const theme = option.dataset.themeOption;
+
+    // Ocultamos todos los iconos dentro del botón y mostramos el icono asociado a la opción elegida
+    // sunIcon.classList("hidden");
+    // moonIcon.classList("hidden");
+    // systemIcon.classList("hidden");
+
+    // [sunIcon, moonIcon, systemIcon].forEach((icon) =>
+    //   icon.classList.add("hidden")
+    // );
+
+    updateThemeUI(theme);
+    updateTheme(theme);
+  });
+});
+
+document
+  .getElementById("toggle-theme-menu")
+  .addEventListener("click", () => themeMenu.classList.toggle("hidden"));
