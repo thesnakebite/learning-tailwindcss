@@ -70,3 +70,14 @@ themeOptions.forEach((option) => {
 document
   .getElementById("toggle-theme-menu")
   .addEventListener("click", () => themeMenu.classList.toggle("hidden"));
+
+// Botón móvil menu
+const toggleMobileMenu = document.getElementById("toggle-mobile-menu");
+
+toggleMobileMenu.addEventListener("click", () => {
+  document.getElementById("mobile-menu").classList.toggle("hidden");
+
+  document.getElementById("open-menu-icon").classList.toggle("hidden");
+
+  document.getElementById("close-menu-icon").classList.toggle("hidden");
+});
