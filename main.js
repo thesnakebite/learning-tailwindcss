@@ -15,7 +15,8 @@ const themeOptions = document.querySelectorAll("[data-theme-option]");
 // Consultamos si el usuario tiene el sistema activado darkmode
 const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
 
-let currentTheme = "system";
+let currentTheme =
+  localStorage.getItem("theme") || localStorage.setItem("theme", "system");
 
 updateTheme(currentTheme);
 updateThemeUI(currentTheme);
@@ -29,6 +30,7 @@ function updateThemeUI(theme) {
 
   // Finalmente ocultamos el menu
   themeMenu.classList.add("hidden");
+  localStorage.setItem("theme", theme);
 }
 
 function updateTheme(theme) {
